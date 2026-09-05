@@ -2,9 +2,9 @@
 what the database looks like: tables, their columns, and how they relate to each other (foreign keys, relationships).
 """
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey, Enum as SqlEnum
+from sqlalchemy import ForeignKey, Enum as SqlEnum, ARRAY, String
 from datetime import date
-from database.db import Base
+from app.database.db import Base
 from enum import Enum
 import uuid
 
@@ -16,6 +16,7 @@ class Results(str, Enum):
 class Client(Base): 
     __tablename__ = "clients"
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default = uuid.uuid4)
+    google_places_api: Mapped[str] = mapped_column(unique = True)
     # business information
     business_name: Mapped[str]
     owner_name: Mapped[str | None] = mapped_column(nullable= True)
@@ -23,9 +24,9 @@ class Client(Base):
     location: Mapped[str]
     # contact information
     phone: Mapped[str | None] = mapped_column(nullable = True)
-    email: Mapped[str | None] = mapped_column(nullable = True)
+    email: Mapped[list[str] | None] = mapped_column(ARRAY(String), nullable = True)
     # outreach status and result (does it make sense for this to be another db? with just 3 rows)
-    messaged_at: Mapped[date] = mapped_column(default = date.today)
+    messaged_at: Mapped[date] = mapped_column(nullable = True)
     contacted: Mapped[bool] = mapped_column(default = False)
     contact_result: Mapped[str | None] = mapped_column(SqlEnum(Results), name = "results", nullable= True)
     # relationships
