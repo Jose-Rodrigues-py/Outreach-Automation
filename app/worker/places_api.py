@@ -40,6 +40,8 @@ async def fetch_leads(response_data):
                     business_name = name,
                     google_places_id = place_id,
                     email = emails,
+                    website = website,
+                    phone = phone,
                     category=p_type,
                     location=location,
                     phone=phone

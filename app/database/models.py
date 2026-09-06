@@ -8,27 +8,27 @@ from app.database.db import Base
 from enum import Enum
 import uuid
 
-class Results(str, Enum): 
-    rejected = "rejected"
-    ignored = "ignored"
+class Result(str, Enum):
     accepted = "accepted"
+    ignored = "ignored"
+    rejected = "rejected"
 
 class Client(Base): 
     __tablename__ = "clients"
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default = uuid.uuid4)
-    google_places_api: Mapped[str] = mapped_column(unique = True)
+    google_places_id: Mapped[str] = mapped_column(unique = True)
     # business information
     business_name: Mapped[str]
     owner_name: Mapped[str | None] = mapped_column(nullable= True)
     category: Mapped[str]
     location: Mapped[str]
     # contact information
+    website: Mapped[str | None] = mapped_column(nullable = True)
     phone: Mapped[str | None] = mapped_column(nullable = True)
     email: Mapped[list[str] | None] = mapped_column(ARRAY(String), nullable = True)
-    # outreach status and result (does it make sense for this to be another db? with just 3 rows)
-    messaged_at: Mapped[date] = mapped_column(nullable = True)
-    contacted: Mapped[bool] = mapped_column(default = False)
-    contact_result: Mapped[str | None] = mapped_column(SqlEnum(Results), name = "results", nullable= True)
+    # outreach status and result
+    message: Mapped["Message | None"] = relationship(back_populates="client")
+    outreach_result: Mapped[str | None] = mapped_column(SqlEnum(Result), name = "Result", nullable = True)
     # relationships
     notes: Mapped[list["Note"]] = relationship(back_populates="client")
     project: Mapped[list["Project"]] = relationship(back_populates="client")
@@ -65,3 +65,14 @@ class Note(Base):
     project_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("projects.id"), nullable=True) # actual relationships
     client: Mapped["Client | None"] = relationship(back_populates="notes") # ensures it's in sync
     project: Mapped["Project | None"] = relationship(back_populates="notes")
+
+class Message(Base):
+    __tablename__ = "messages"
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default = uuid.uuid4)
+    draft: Mapped[str]
+    draft_accepted: Mapped[bool | None] = mapped_column(nullable = True)
+    content_sent: Mapped[str | None] = mapped_column(nullable= True)
+    sent_at: Mapped[date | None] = mapped_column(nullable= True) # if None -> contacted = False; else contacted = True (saves one row)
+
+    client: Mapped["Client | None"] = relationship(back_populates="message")
+    client_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("clients.id"), nullable=True)
