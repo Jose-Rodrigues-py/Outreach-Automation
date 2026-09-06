@@ -47,6 +47,7 @@ class Project(Base):
     # status
     status: Mapped[str] = mapped_column(SqlEnum(ProjectStatus), name = "project_status")
     # relationships
+    client_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("clients.id", ondelete="CASCADE"), nullable=True)
     client: Mapped["Client"] = relationship(back_populates="projects")
     notes: Mapped[list["Note"]] = relationship(back_populates="project")
 
@@ -61,7 +62,7 @@ class Note(Base):
     type: Mapped[str] = mapped_column(SqlEnum(Type), name = "Type")
     created_at: Mapped[date] = mapped_column(default = date.today)
     # relationships
-    client_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("clients.id"), nullable=True)
+    client_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("clients.id", ondelete="CASCADE"), nullable=True)
     project_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("projects.id"), nullable=True) # actual relationships
     client: Mapped["Client | None"] = relationship(back_populates="notes") # ensures it's in sync
     project: Mapped["Project | None"] = relationship(back_populates="notes")
@@ -75,4 +76,4 @@ class Message(Base):
     sent_at: Mapped[date | None] = mapped_column(nullable= True) # if None -> contacted = False; else contacted = True (saves one row)
 
     client: Mapped["Client | None"] = relationship(back_populates="message")
-    client_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("clients.id"), nullable=True)
+    client_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("clients.id", ondelete="CASCADE"), nullable=True)
