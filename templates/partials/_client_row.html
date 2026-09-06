@@ -1,0 +1,44 @@
+<tr id="client-row-{{ c.id }}">
+  <td>
+    {% if c.message and not c.message.sent_at %}
+    <input type="checkbox" name="message_ids" value="{{ c.message.id }}" form="bulk-send-form">
+    {% endif %}
+  </td>
+  <td>
+    <div style="font-weight:500;">{{ c.business_name }}</div>
+    {% if c.phone %}<div class="mono" style="font-size:0.75rem;color:var(--text-muted);">{{ c.phone }}</div>{% endif %}
+    <details style="margin-top:6px;" hx-get="/ui/clients/{{ c.id }}/projects" hx-trigger="toggle once" hx-target="find .project-body" hx-swap="innerHTML">
+      <summary>Projetos</summary>
+      <div class="project-body" style="padding:6px 0 0 12px;"></div>
+    </details>
+  </td>
+  <td class="mono" style="font-size:0.8rem;">{{ c.category }}</td>
+  <td style="font-size:0.85rem;color:var(--text-muted);">{{ c.location }}</td>
+  <td>
+    {% if not c.message %}
+      <span class="badge badge-pending">Pendente</span>
+    {% elif not c.message.sent_at %}
+      <span class="badge badge-draft">Rascunho</span>
+    {% else %}
+      <span class="badge badge-sent">Enviado {{ c.message.sent_at.strftime('%d/%m') }}</span>
+    {% endif %}
+  </td>
+  <td>
+    {% if not c.message %}
+      <button class="btn btn-accept" hx-post="/ui/clients/{{ c.id }}/accept" hx-target="closest tr" hx-swap="outerHTML">Aceitar</button>
+      <button class="btn btn-reject" hx-delete="/ui/clients/{{ c.id }}" hx-target="closest tr" hx-swap="delete" hx-confirm="Remover {{ c.business_name }}?">Rejeitar</button>
+    {% elif not c.message.sent_at %}
+      <details>
+        <summary style="color:var(--accent-draft);">Ver rascunho</summary>
+        <textarea class="draft-box" name="draft"
+          hx-patch="/ui/messages/{{ c.message.id }}"
+          hx-trigger="blur changed"
+          hx-target="#save-status-{{ c.message.id }}">{{ c.message.draft }}</textarea>
+        <span id="save-status-{{ c.message.id }}" class="save-status"></span>
+      </details>
+      <button class="btn btn-reject" hx-delete="/ui/clients/{{ c.id }}" hx-target="closest tr" hx-swap="delete" hx-confirm="Remover {{ c.business_name }}?" style="margin-top:6px;">Remover</button>
+    {% else %}
+      <span style="font-size:0.8rem;color:var(--text-muted);">—</span>
+    {% endif %}
+  </td>
+</tr>

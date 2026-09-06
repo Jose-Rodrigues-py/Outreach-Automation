@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="toolbar">
+  <div>
+    <h1 style="margin:0;font-size:1.1rem;font-weight:600;">Painel de Contactos</h1>
+    <p style="margin:2px 0 0;font-size:0.8rem;color:var(--text-muted);">{{ clients|length }} negócios</p>
+  </div>
+  <form id="bulk-send-form" hx-post="/ui/messages/bulk-send" hx-target="#client-table-body" hx-swap="outerHTML" style="display:flex;align-items:center;gap:10px;">
+    <select name="account_key">
+      {% for key, acc in accounts.items() %}
+      <option value="{{ key }}">{{ acc.email }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">Enviar selecionados</button>
+  </form>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:32px;"></th>
+      <th>Negócio</th>
+      <th>Categoria</th>
+      <th>Localização</th>
+      <th>Estado</th>
+      <th style="width:220px;"></th>
+    </tr>
+  </thead>
+  {% include "partials/_table_body.html" %}
+</table>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% if projects %}
+<ul style="margin:0;padding-left:16px;font-size:0.85rem;">
+  {% for p in projects %}
+  <li style="margin-bottom:8px;">
+    <div>{{ p.description }}</div>
+    <div style="color:var(--text-muted);font-size:0.75rem;">
+      Estado: {{ p.status }}. Vence a {{ p.due_date.strftime('%d/%m/%Y') }}.
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p style="color:var(--text-muted);font-size:0.85rem;margin:0;">Sem projetos ainda.</p>
+{% endif %}

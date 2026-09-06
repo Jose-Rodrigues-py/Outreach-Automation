@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Painel de Contactos{% endblock %}</title>
+<script src="https://unpkg.com/htmx.org@1.9.12"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #17181B;
+    --surface: #1F2124;
+    --surface-hover: #26282C;
+    --border: #2A2C30;
+    --text: #ECEDEE;
+    --text-muted: #8A8D93;
+    --accent-draft: #D9A441;
+    --accent-sent: #4FAE8C;
+    --accent-danger: #C4636B;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    margin: 0;
+  }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:hover { background: var(--surface-hover); }
+  .btn {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+  }
+  .btn:hover { background: var(--surface-hover); }
+  .btn-accept { border-color: var(--accent-sent); color: var(--accent-sent); }
+  .btn-reject { border-color: var(--accent-danger); color: var(--accent-danger); }
+  .btn-primary {
+    background: var(--accent-sent);
+    border-color: var(--accent-sent);
+    color: #0E1210;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .badge-pending { background: rgba(138,141,147,0.15); color: var(--text-muted); }
+  .badge-draft { background: rgba(217,164,65,0.15); color: var(--accent-draft); }
+  .badge-sent { background: rgba(79,174,140,0.15); color: var(--accent-sent); }
+  textarea.draft-box {
+    width: 100%;
+    min-height: 90px;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 0.9rem;
+    font-family: 'IBM Plex Sans', sans-serif;
+    resize: vertical;
+  }
+  textarea.draft-box:focus { outline: 1px solid var(--accent-draft); border-color: var(--accent-draft); }
+  details summary { cursor: pointer; color: var(--text-muted); font-size: 0.85rem; }
+  .toolbar {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  select {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+  .save-status { font-size: 0.75rem; color: var(--text-muted); margin-left: 8px; }
+</style>
+</head>
+<body>
+{% block content %}{% endblock %}
+</body>
+</html>

@@ -31,7 +31,7 @@ class Client(Base):
     outreach_result: Mapped[str | None] = mapped_column(SqlEnum(Result), name = "Result", nullable = True)
     # relationships
     notes: Mapped[list["Note"]] = relationship(back_populates="client")
-    project: Mapped[list["Project"]] = relationship(back_populates="client")
+    projects: Mapped[list["Project"]] = relationship(back_populates="client")
 
 class ProjectStatus(str, Enum): 
     done = "done"
